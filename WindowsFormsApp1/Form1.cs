@@ -128,7 +128,6 @@ namespace WindowsFormsApp1{
             guardar_como("texto de prueba");
         }
 
-
         public void guardar_en_Draw(String contenido)
         {
                 try
@@ -173,8 +172,6 @@ namespace WindowsFormsApp1{
         {
             MessageBox.Show("*Desarrolladores" + Environment.NewLine + "Cristian Suy -[Coordinador] 201700918." + Environment.NewLine + "Yelstin de León - 201602836. " + Environment.NewLine + "Ricardo Pérez - 201700524. " + Environment.NewLine + "Byron Gómez - 201700544. " + Environment.NewLine + "Diego Méndez - 201712680", "Acerca De", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-
-
 
         public void abrir_documento(String nombre_archivo){
             Process aperturar = new Process();
@@ -418,7 +415,8 @@ namespace WindowsFormsApp1{
             {
                 for (int i = pos; i < coordenadas.Count; i++)
                 {
-                    MessageBox.Show("Las Coordenadas son: (" + coordenadas[i] + ")");
+                    //MessageBox.Show("Las Coordenadas son: (" + coordenadas[i] + ")");
+                    com_serial(Convert.ToString(coordenadas[i]));
                     temp++;
                     Thread.Sleep(4000);
                 }
@@ -428,11 +426,12 @@ namespace WindowsFormsApp1{
             {
                 for (int i = pos; i < pos+3; i++)
                 {
-                    MessageBox.Show("Las Coordenadas son: (" + coordenadas[i] + ")");
+                    //MessageBox.Show("Las Coordenadas son: (" + coordenadas[i] + ")");
+                    com_serial(Convert.ToString(coordenadas[i]));
                     temp++;
                     Thread.Sleep(4000);
                 }
-                MessageBox.Show("Presione Continuar Impresion cuando este listo para continuar");
+                MessageBox.Show("Presione \"Continuar Impresion\" cuando este listo para continuar");
             }
         }
 
@@ -445,6 +444,54 @@ namespace WindowsFormsApp1{
         private void ayudaToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        public void com_serial(string coor123)
+        {
+            string[] datos = coor123.Split(',');
+            byte[] num = new byte[1];
+            int coordenaFinal = 0;
+            try
+            {
+                int X_1 = Convert.ToInt32(datos[0]);
+                int Y_1 = Convert.ToInt32(datos[1]);
+                switch (X_1)
+                {
+                    case 0:
+                        coordenaFinal = Y_1;
+                        break;
+                    case 1:
+                        coordenaFinal = 16 + Y_1;
+                        break;
+                    case 2:
+                        coordenaFinal = 32 + Y_1;
+                        break;
+                    case 3:
+                        coordenaFinal = 32 + 16 + Y_1;
+                        break;
+                    case 4:
+                        coordenaFinal = 64 + Y_1;
+                        break;
+                    case 5:
+                        coordenaFinal = 64 + 16 + Y_1;
+                        break;
+                    case 6:
+                        coordenaFinal = 64 + 32 + Y_1;
+                        break;
+                    case 7:
+                        coordenaFinal = 64 + 32 + 16 + Y_1;
+                        break;
+                    default:
+                        MessageBox.Show("Rango de para X: 0<X<7");
+                        break;
+                }
+                num[0] = Convert.ToByte(coordenaFinal);
+                MessageBox.Show("La Coordenada Mandada fue: (" + coor123 + ") \n Su Numero Binario en decimal: " + num[0].ToString());
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.Message);
+            }
         }
     }
 }
